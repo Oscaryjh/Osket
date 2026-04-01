@@ -132,6 +132,26 @@ export default function AppShell({ children }: PropsWithChildren) {
                 <div className="mt-1 text-xs text-muted-foreground">一步一步教你新增来宾、桌次与签到</div>
               </button>
 
+              <button
+                type="button"
+                className="w-full rounded-xl border border-border bg-background px-3 py-3 text-left text-sm hover:bg-muted/40"
+                onClick={() => {
+                  if (!confirm("确定要登出吗？")) return;
+                  void (async () => {
+                    try {
+                      await signOut();
+                      toast.success("已登出");
+                      setLocation("/portal");
+                    } catch (e: any) {
+                      toast.error(e?.message || "登出失败");
+                    }
+                  })();
+                }}
+              >
+                <div className="font-medium">登出</div>
+                <div className="mt-1 text-xs text-muted-foreground">退出当前账号，返回入口页</div>
+              </button>
+
               <div className="text-xs text-muted-foreground leading-relaxed">
                 提示：记得在【设置】里导出备份 JSON，避免浏览器清缓存丢资料。
               </div>
@@ -151,23 +171,6 @@ export default function AppShell({ children }: PropsWithChildren) {
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <BanquetSwitcher />
-                <button
-                  type="button"
-                  className="rounded-xl border border-border bg-background px-3 py-2 text-sm hover:bg-muted/40"
-                  onClick={() => {
-                    void (async () => {
-                      try {
-                        await signOut();
-                        toast.success("已登出");
-                        setLocation("/portal");
-                      } catch (e: any) {
-                        toast.error(e?.message || "登出失败");
-                      }
-                    })();
-                  }}
-                >
-                  登出
-                </button>
               </div>
             </div>
             <div className="mx-auto max-w-6xl">
